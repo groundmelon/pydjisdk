@@ -5,7 +5,9 @@ from utils import StoppableThread
 import EncryptCodec
 import Queue
 import struct
-from utils import LOG, WARN
+import logging
+import logging.config
+import yaml
 
 import DataCodec.activation as DataCodecActivation
 import DataCodec.control as DataCodecControl
@@ -61,6 +63,11 @@ class SDKApplication(StoppableThread):
 
     def __init__(self, **kwargs):
         super(SDKApplication, self).__init__()
+
+        with open('logconfig.yaml', 'r') as f:
+            logging.config.dictConfig(yaml.load(f.read(), Loader=yaml.Loader))
+
+        self.applogger = logging.getLogger('app')
 
         self.port_rx_stream_queue = Queue.Queue()
         self.parsed_message_queue = Queue.Queue()
@@ -162,7 +169,7 @@ class SDKApplication(StoppableThread):
 
     def api_version_ack_callback(self, buf):
         if buf is None:
-            print('Get api version failed.')
+            self.applogger.warning('Get api version failed.')
         else:
             DataCodecActivation.decode_acquire_api_version_ack(buf)
 
@@ -178,7 +185,7 @@ class SDKApplication(StoppableThread):
 
     def active_api_ack_callback(self, buf):
         if buf is None:
-            print('Get active api failed.')
+            self.applogger.warning('Get active api failed.')
         else:
             DataCodecActivation.decode_active_api_ack(buf)
 
@@ -202,6 +209,6 @@ class SDKApplication(StoppableThread):
 
     def control_ack_callback(self, buf):
         if buf is None:
-            print('Acquire/Release control failed.')
+            self.applogger.warning('Acquire/Release control failed.')
         else:
             DataCodecControl.decode_acquire_control_ack(buf)

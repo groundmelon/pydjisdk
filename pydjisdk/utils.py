@@ -10,12 +10,12 @@ def bytesToHexStr(s):
     return base64.b16encode(s)
 
 
-def LOG(s):
-    print(s)
+# def LOG(s):
+#     print(s)
 
 
-def WARN(s):
-    print(s)
+# def WARN(s):
+#     print(s)
 
 
 class StoppableThread(threading.Thread):

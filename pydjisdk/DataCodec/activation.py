@@ -1,5 +1,7 @@
-from ..utils import *
+import logging
 import struct
+
+LOGGER_NAME = 'app.codec'
 
 ########################################
 ACQUIRE_API_VERSION_FMT = '<B'
@@ -23,7 +25,7 @@ def encode_acquire_api_version_ack(s):
 
 def decode_acquire_api_version_ack(s):
     rst = struct.unpack(ACQUIRE_API_VER_ACK_FMT, s[:6])
-    LOG('API Version: {} with Return Code[0x{:X}]'.format(
+    logging.getLogger(LOGGER_NAME).info('API Version: {} with Return Code[0x{:X}]'.format(
         s[6:], rst[0]))
 
 
@@ -47,7 +49,7 @@ def decode_active_api(s):
     api_level = rst[1]
     app_ver = rst[2]
     bundle_id = rst[3]
-    LOG('AppID:{} Level:{} Version:{} bundle:{}'.format(
+    logging.getLogger(LOGGER_NAME).info('AppID:{} Level:{} Version:{} bundle:{}'.format(
         app_id, api_level, app_ver, bundle_id))
 
 ########################################
@@ -56,12 +58,13 @@ ACTIVE_API_ACK_DICT = zip(
     range(0, 8),
     ('Success',
      'Invalid parameters',
-     'Cannot recognize encrypted package',
-     'Attempt to activate',
-     'DJI Pilot APP no response'
-     'DJI Pilot APP no Internet'
-     'Server rejected activation attempt'
-     'Insufficient authority level'
+     'Cannot recognize the encrypted package',
+     'New APP ID, activation in progress',
+     'No response from DJI GO APP',
+     'No Internet from DJI GO APP',
+     'Server rejected',
+     'Authorization level insufficient',
+     'Wrong SDK version',
      ))
 
 
@@ -71,7 +74,7 @@ def encode_active_api_ack(s):
 
 def decode_active_api_ack(s):
     data = struct.unpack('<H',s)[0]
-    LOG('Activation result: {}'.format(
+    logging.getLogger(LOGGER_NAME).info('Activation result: {}'.format(
         ACTIVE_API_ACK_DICT[data]))
 
 ########################################

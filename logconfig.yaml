@@ -1,0 +1,26 @@
+version: 1
+formatters:
+  simple:
+    format: '[%(name)8s] %(message)s'
+  full:
+    format: '%(asctime)s [%(name)8s] %(levelname)s %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: ERROR
+    formatter: simple
+    stream: ext://sys.stdout
+  logfile:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: full
+    filename: 'python.log'
+    backupCount: 2
+loggers:
+  app:
+    level: DEBUG
+    handlers: [logfile, console]
+    propagate: no
+root:
+  level: DEBUG
+  handlers: [logfile, console]

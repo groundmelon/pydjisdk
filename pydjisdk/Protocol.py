@@ -3,7 +3,7 @@ from ctypes import c_uint8, c_uint16, c_uint32, c_double, c_float, c_int16, c_in
 import collections
 import base64
 import struct
-
+import logging
 import Queue
 
 from utils import *
@@ -158,6 +158,8 @@ class ProtocolParser(StoppableThread):
         self.header = None
         self.parsed_size = 0
 
+        self.parserlogger = logging.getLogger("app.parser")
+
         self.input_buffer_queue = input_buffer_queue
         self.output_msg_queue = output_msg_queue
 
@@ -227,7 +229,7 @@ class ProtocolParser(StoppableThread):
         crcval = calcCrc32(buf[: -4])
         rst = struct.unpack('<I', bytearray(buf[-4:]))
         if (crcval != rst[0]):
-            WARN('Data field CRC32 failed. header={}'.format(self.header))
+            self.parserlogger.warning('Data field CRC32 failed. header={}'.format(self.header))
             rtnval = (False, HEADER_LEN)
         else:
             # print 'CRC32[{}] {}'.format(base64.b16encode(buf[-4:]),
@@ -239,7 +241,7 @@ class ProtocolParser(StoppableThread):
 
             #### TODO debug ####
             if self.header.ack:
-                print(self.header)
+                self.parserlogger.info(self.header)
             ####################
 
             self.output_msg_queue.put((self.header, raw_buf), timeout=10.0)
@@ -247,7 +249,7 @@ class ProtocolParser(StoppableThread):
         return rtnval
 
     def run(self):
-        LOG('{}({}) will start'.format(self.name, self.__class__))
+        self.parserlogger.info('{}({}) will start'.format(self.name, self.__class__))
         while not self.stopped():
             try:
                 buf = self.input_buffer_queue.get(block=True, timeout=10.0)
@@ -255,4 +257,4 @@ class ProtocolParser(StoppableThread):
                 self.feed(buf)
             except Queue.Empty, e:
                 pass
-        LOG('{}({}) will stop.'.format(self.name, self.__class__))
+        self.parserlogger.info('{}({}) will stop.'.format(self.name, self.__class__))

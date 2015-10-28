@@ -29,7 +29,7 @@ class SerialListener(StoppableThread):
         self.statistics = statistics
 
     def run(self):
-        print('{}({}) will start.'.format(self.name, self.__class__))
+        logging.getLogger('app').info('{}({}) will start.'.format(self.name, self.__class__))
         while not self.stopped():
             buf = self.ser.read(self.read_bytes)
             if buf:
@@ -37,7 +37,7 @@ class SerialListener(StoppableThread):
                 self.buffer_queue.put(buf, block=True, timeout=10.0)
             else:
                 pass
-        print('{}({}) will stop.'.format(self.name, self.__class__))
+        logging.getLogger('app').info('{}({}) will stop.'.format(self.name, self.__class__))
 
 # TODO Send queue is needed?
 

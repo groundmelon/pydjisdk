@@ -1,2 +1,6 @@
 *.pyc
-*.yaml
+config.yaml
+log/*.*
+*.log
+*.log.*
+

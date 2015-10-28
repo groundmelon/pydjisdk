@@ -1,11 +1,12 @@
 from Protocol import ProtocolHeader
 import time
 import itertools
-from utils import StoppableThread, LOG, WARN
+from utils import StoppableThread
 from EncryptCodec import calcCrc32
 import Queue
 import base64
 import struct
+import logging
 
 
 class SessionType(object):
@@ -47,6 +48,8 @@ class Session(StoppableThread):
 
         self.buf = self.pack()
 
+        self.logger = logging.getLogger('app.ssn')
+
     def __repr__(self):
         return '<SessionThread> session_id[{}] #{}'.format(self.session_id, self.seq)
 
@@ -62,14 +65,14 @@ class Session(StoppableThread):
 
     def send_buffer(self):
         self.send_func(self.buf)
-        print('Send [{}]'.format(base64.b16encode(self.buf)))
-        print(self.header)
+        self.logger.info('Send [{}]'.format(base64.b16encode(self.buf)))
+        self.logger.info(self.header)
 
     def feed(self, buf):
         self.ack_queue.put(buf, block=True, timeout=self.timeout)
 
     def run(self):
-        LOG('{} will start'.format(self))
+        self.logger.info('{} will start'.format(self))
         while (not self.stopped()):
             if self.retry_cnt < self.retry:
                 try:
@@ -82,10 +85,10 @@ class Session(StoppableThread):
                     self.retry_cnt += 1
             else:
                 self.ack_callback(None)
-                WARN('Receive ack failed. {}'.format(self))
+                self.logger.warning('Receive ack failed. {}'.format(self))
                 break
         self.running = False
-        LOG('{} will stop.'.format(self))
+        self.logger.info('{} will stop.'.format(self))
 
     def pack(self):
         header = ProtocolHeader()
@@ -116,6 +119,8 @@ class SessionManager(object):
             range(SessionType.RequiredRange[0], SessionType.RequiredRange[1] + 1), None)
         self.seq = 0
 
+        self.logger = logging.getLogger('app.smg')
+
     def close_all_sessions(self):
         for s in self.op_ack_sessions.values():
             if s is not None:
@@ -143,7 +148,7 @@ class SessionManager(object):
                     break
 
         if session_id is None:
-            LOG('No empty session!')
+            self.logger.warning('No empty session!')
             return False
 
         session = Session(session_id, self.seq, self.send_func, **kwargs)
@@ -172,13 +177,13 @@ class SessionManager(object):
         if session_id is SessionType.OptionalAck:
             session = self.op_ack_sessions.get(seq)
             if session is None:
-                WARN(
+                self.logger.warning(
                     'Optional Session[{}] Seq[{}] not found!'.format(session_id, seq))
                 return
         elif session_id in SessionType.RequiredRange:
             session = self.re_ack_sessions.get(session_id)
             if session is None:
-                WARN(
+                self.logger.warning(
                     'Required Session[{}] Seq[{}] not found!'.format(session_id, seq))
                 return
         else:
