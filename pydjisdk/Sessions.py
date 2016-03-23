@@ -48,7 +48,7 @@ class Session(StoppableThread):
 
         self.buf = self.pack()
 
-        self.logger = logging.getLogger('app.ssn')
+        self.logger = logging.getLogger('app.ss%d' % session_id)
 
     def __repr__(self):
         return '<SessionThread> session_id[{}] #{}'.format(self.session_id, self.seq)
@@ -65,14 +65,14 @@ class Session(StoppableThread):
 
     def send_buffer(self):
         self.send_func(self.buf)
-        self.logger.info('Send [{}]'.format(base64.b16encode(self.buf)))
-        self.logger.info(self.header)
+        self.logger.debug('Send [{}]'.format(base64.b16encode(self.buf)))
+        self.logger.debug(self.header)
 
     def feed(self, buf):
         self.ack_queue.put(buf, block=True, timeout=self.timeout)
 
     def run(self):
-        self.logger.info('{} will start'.format(self))
+        self.logger.debug('{} will start'.format(self))
         while (not self.stopped()):
             if self.retry_cnt < self.retry:
                 try:
@@ -88,7 +88,7 @@ class Session(StoppableThread):
                 self.logger.warning('Receive ack failed. {}'.format(self))
                 break
         self.running = False
-        self.logger.info('{} will stop.'.format(self))
+        self.logger.debug('{} will stop.'.format(self))
 
     def pack(self):
         header = ProtocolHeader()

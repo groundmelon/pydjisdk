@@ -7,19 +7,28 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
-    level: ERROR
+    level: INFO
     formatter: simple
     stream: ext://sys.stdout
   logfile:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
     formatter: full
-    filename: 'python.log'
+    filename: 'log/python.log'
     backupCount: 2
+  broadcastfile:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: full
+    filename: 'log/broadcastdata.log'
 loggers:
   app:
     level: DEBUG
     handlers: [logfile, console]
+    propagate: no
+  broadcast:
+    level: DEBUG
+    handlers: [broadcastfile]
     propagate: no
 root:
   level: DEBUG

@@ -75,8 +75,7 @@ class SDKApplication(StoppableThread):
         self.active_info = dict(
             [(k, kwargs.get(k, v)) for (k, v) in [
                 ('app_id', None),
-                ('api_level', 0x02),
-                ('app_ver', 0x01),
+                ('app_ver', 0x03010A00),
                 ('bundle_id', '12345678901234567890123456789012'),
             ]]
         )

@@ -241,7 +241,7 @@ class ProtocolParser(StoppableThread):
 
             #### TODO debug ####
             if self.header.ack:
-                self.parserlogger.info(self.header)
+                self.parserlogger.debug(self.header)
             ####################
 
             self.output_msg_queue.put((self.header, raw_buf), timeout=10.0)
@@ -249,7 +249,7 @@ class ProtocolParser(StoppableThread):
         return rtnval
 
     def run(self):
-        self.parserlogger.info('{}({}) will start'.format(self.name, self.__class__))
+        self.parserlogger.debug('{}({}) will start'.format(self.name, self.__class__))
         while not self.stopped():
             try:
                 buf = self.input_buffer_queue.get(block=True, timeout=10.0)
@@ -257,4 +257,4 @@ class ProtocolParser(StoppableThread):
                 self.feed(buf)
             except Queue.Empty, e:
                 pass
-        self.parserlogger.info('{}({}) will stop.'.format(self.name, self.__class__))
+        self.parserlogger.debug('{}({}) will stop.'.format(self.name, self.__class__))

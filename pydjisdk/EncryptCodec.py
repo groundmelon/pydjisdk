@@ -33,7 +33,8 @@ class CRC(object):
 
     def __init__(self, poly, initval):
         self.crc = crcmod.Crc(poly, initval)
-        logging.getLogger('app').info('Init CRC with poly=0x{:X} initval=0x{:X}'.format(poly, initval))
+        logging.getLogger('app').debug(
+            'Init CRC with poly=0x{:X} initval=0x{:X}'.format(poly, initval))
 
     def calc(self, buf):
         crc = self.crc.new(buf)

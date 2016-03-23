@@ -30,13 +30,12 @@ def decode_acquire_api_version_ack(s):
 
 
 ########################################
-ACTIVE_API_FMT = '<III32s'
+ACTIVE_API_FMT = '<II32s'
 
 
 def encode_active_api(**kwargs):
     buf = struct.pack(ACTIVE_API_FMT,
                       kwargs['app_id'],
-                      kwargs['api_level'],
                       kwargs['app_ver'],
                       kwargs['bundle_id'],
                       )
@@ -54,8 +53,8 @@ def decode_active_api(s):
 
 ########################################
 ACTIVE_API_ACK_FMT = '<H'
-ACTIVE_API_ACK_DICT = zip(
-    range(0, 8),
+ACTIVE_API_ACK_DICT = dict(zip(
+    range(0, 9),
     ('Success',
      'Invalid parameters',
      'Cannot recognize the encrypted package',
@@ -65,7 +64,7 @@ ACTIVE_API_ACK_DICT = zip(
      'Server rejected',
      'Authorization level insufficient',
      'Wrong SDK version',
-     ))
+     )))
 
 
 def encode_active_api_ack(s):
@@ -73,7 +72,8 @@ def encode_active_api_ack(s):
 
 
 def decode_active_api_ack(s):
-    data = struct.unpack('<H',s)[0]
+    data = struct.unpack('<H', s)[0]
+    print("data=", data)
     logging.getLogger(LOGGER_NAME).info('Activation result: {}'.format(
         ACTIVE_API_ACK_DICT[data]))
 

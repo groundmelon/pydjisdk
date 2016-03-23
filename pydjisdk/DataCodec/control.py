@@ -1,3 +1,4 @@
+import logging
 from ..utils import *
 import struct
 
@@ -34,7 +35,8 @@ def encode_acquire_control_ack(**kwargs):
 def decode_acquire_control_ack(s):
     rst = struct.unpack(ACQUIRE_CONTROL_ACK_FMT, s)
     ack = rst[0]
-    logging.getLogger(LOGGER_NAME).info('Control acquire result: {}'.format(ACQUIRE_CONTROL_ACK_DICT[ack]))
+    logging.getLogger(LOGGER_NAME).info(
+        'Control acquire result: {}'.format(ACQUIRE_CONTROL_ACK_DICT[ack]))
 
 #########################################
 TASK_CONTROL_DICT = dict((
@@ -107,7 +109,8 @@ def decode_task_inquire_ack(s):
     rst = struct.unpack(TASK_INQUIRE_ACK_FMT, s)
     seq = rst[0]
     ack = rst[1]
-    logging.getLogger(LOGGER_NAME).info('Task inquire #{} rst: {}'.format(seq, TASK_INQUIRE_ACK_DICT[ack]))
+    logging.getLogger(LOGGER_NAME).info(
+        'Task inquire #{} rst: {}'.format(seq, TASK_INQUIRE_ACK_DICT[ack]))
 
 #########################################
 ATT_CONTROL_FMT = '<B4f'
@@ -131,8 +134,10 @@ def decode_atti_control(s):
 #########################################
 CTRL_AUTH_CHANGE_FMT = '<B'
 
+
 def encode_ctrl_auth_change(**kwargs):
     assert False, 'Construction in progress.'
+
 
 def decode_ctrl_auth_change(s):
     rst = struct.unpack(CTRL_AUTH_CHANGE_FMT, s)

@@ -1,0 +1,4 @@
+app_id: ******* # get from dji developer website
+app_ver: 0x03010A00
+enc_key: **************************************************************** # get from dji developer website
+port: /dev/ttyUSB0
