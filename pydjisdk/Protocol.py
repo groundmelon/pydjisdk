@@ -39,6 +39,24 @@ DATA_CRC_LEN = 4
 
 class ProtocolHeader(object):
 
+    '''
+    ProtocolHeader class for pack/unpack header information.
+
+    Interfaces:
+
+    parse(self, buf)
+    - Parse a buffer, set values in header_field_table
+    - parameters:
+        buf: raw binary buffer which will be parsed
+
+    is_valid()
+    - Check if recent parsed buffer is valid
+
+    render(self, **kwargs)
+    - Render a header buf according to kwargs.
+
+    '''
+
     def __init__(self):
         self.u = ProtocolHeaderUnion()
 
@@ -92,6 +110,25 @@ class ProtocolHeader(object):
 
 class ProtocolData(object):
 
+    '''
+    ProtocolData class for pack/unpack data information.
+
+    Interfaces:
+
+    parse(self, buf)
+    - Parse a buffer, return cmd_set, cmd_id and data field buf
+    - parameters:
+        buf: raw binary buffer which will be parsed
+
+    render(self, cmd_set, cmd_id, raw_data_buf, is_enc)
+    - Render a data buf according to parameters.
+    - parameters:
+        cmd_set: command set
+        cmd_id : command id
+        raw_data_buf: data field buf
+        is_enc : whether raw_data_buf needs to be encoded using aes256
+    '''
+
     def __init__(self):
         pass
 
@@ -131,7 +168,7 @@ from utils import StoppableThread
 class ProtocolParser(StoppableThread):
 
     '''
-    Protocol parser class for DJISDK
+    Protocol parser class for dji-sdk
 
     This class inherits from threading.thread, so call .run() after construction.
 

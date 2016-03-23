@@ -61,6 +61,31 @@ CMD_SET = CMD_SET_R
 
 class SDKApplication(StoppableThread):
 
+    '''
+    SDKApplication class for main entrance for api.
+
+    Usage:
+    >>> app = SDKApplication(app_id, aes256_key, port)
+    >>> app.get_api_version()
+    ...
+    >>> app.active_api()
+    ...
+    >>> app.acquire_control()
+    ...
+    >>> app.release_control()
+    ...
+    >>> app.close()
+
+    The following are the parameters supplied to the constructor.
+
+    app_id -- your app id
+
+    aes256_key -- your enc key
+
+    port -- your serial port path
+
+    '''
+
     def __init__(self, **kwargs):
         super(SDKApplication, self).__init__()
 
