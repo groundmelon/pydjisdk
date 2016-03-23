@@ -11,13 +11,13 @@ Very simple code, sometimes naive!
 
 This packages aims to provide a skeleton for full featured dji-sdk application. Currently, there is only four functions implmented as member function in **SDKApplication.py** :
 
-1. ```get_api_version()```
+1.  ``` get_api_version() ```
 
-2. ```active_api()```
+2.  ``` active_api() ```
 
-3. ```acquire_control()```
+3.  ``` acquire_control() ```
 
-4. ```release_control()```
+4.  ``` release_control() ```
 
 It is only for testing basic communication functionality. Developers can add more functions based on it.
 
@@ -29,20 +29,20 @@ It is only for testing basic communication functionality. Developers can add mor
 
 3. Test basic functions
 
-4. With default configuration, I suggest opening 3 terminals for using and testing this package. 
+4. With default configuration, I suggest bringing up 3 terminal windows for using and testing this package: 
 	* Terminal 0 : ```$ python app.py```. 
 
 	* Terminal 1 : ```$ tail -f log/python.log``` for debug information
 
 	* Terminal 2 : ```$ tail -f log/broadcast.log``` for broadcast information from fmu.
 
-#### About output and log ###
+### About Output and Log ###
 
 Thanks for python's powerful logging module, by default, your cout will only print info, warning and error. More detailed debug information can be see in log/python.log. Also, all broadcast data from fmu will be printed out in log/broadcast.log. 
 
 You can see **logconfig.yaml** for details. Also, you can modify it to meet your demand.
 
-## Code Structure and Explanation ###
+### Code Structure and Explanation ###
 
 **app.py**: A sample for how to use package **pydjisdk**
 
@@ -59,3 +59,9 @@ You can see **logconfig.yaml** for details. Also, you can modify it to meet your
 **DataCodec\\*.py**: Provide some codec/decode function according to **dji sdk open protocal**. This package deals with data field in the messages.
 
 **utils.py** : Some helper function.
+
+### CANNOT-FIND-SUITABLE-TITLE-FOR-THIS-PART ###
+
+The reason for there being only four functions is that, it takes too much time for writing encode/decode functions according to official protocal document. And I'm too lazy to do that. 
+
+So, contributions are warmly warmly welcomed!
