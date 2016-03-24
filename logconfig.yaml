@@ -16,11 +16,13 @@ handlers:
     formatter: full
     filename: 'log/python.log'
     backupCount: 2
+    mode: 'w'
   broadcastfile:
     class: logging.FileHandler
     level: DEBUG
     formatter: full
     filename: 'log/broadcastdata.log'
+    mode: 'w'
 loggers:
   app:
     level: DEBUG
