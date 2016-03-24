@@ -10,6 +10,14 @@ def bytesToHexStr(s):
     return base64.b16encode(s)
 
 
+def GetPromptSafely(k, d):
+    rtn = None
+    try:
+        rtn = d[k]
+    except KeyError, e:
+        rtn = "Unknown key:{}".format(k)
+    return rtn
+
 # def LOG(s):
 #     print(s)
 

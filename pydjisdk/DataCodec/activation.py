@@ -1,5 +1,6 @@
 import logging
 import struct
+from ..utils import GetPromptSafely
 
 LOGGER_NAME = 'app.codec'
 
@@ -53,18 +54,17 @@ def decode_active_api(s):
 
 ########################################
 ACTIVE_API_ACK_FMT = '<H'
-ACTIVE_API_ACK_DICT = dict(zip(
-    range(0, 9),
-    ('Success',
-     'Invalid parameters',
-     'Cannot recognize the encrypted package',
-     'New APP ID, activation in progress',
-     'No response from DJI GO APP',
-     'No Internet from DJI GO APP',
-     'Server rejected',
-     'Authorization level insufficient',
-     'Wrong SDK version',
-     )))
+ACTIVE_API_ACK_DICT = dict((
+    (0x00, 'Success'),
+    (0x01, 'Invalid parameters'),
+    (0x02, 'Cannot recognize the encrypted package'),
+    (0x03, 'New APP ID, activation in progress'),
+    (0x04, 'No response from DJI GO APP'),
+    (0x05, 'No Internet from DJI GO APP'),
+    (0x06, 'Server rejected'),
+    (0x07, 'Authorization level insufficient'),
+    (0x08, 'Wrong SDK version'),
+))
 
 
 def encode_active_api_ack(s):
@@ -73,9 +73,8 @@ def encode_active_api_ack(s):
 
 def decode_active_api_ack(s):
     data = struct.unpack('<H', s)[0]
-    print("data=", data)
     logging.getLogger(LOGGER_NAME).info('Activation result: {}'.format(
-        ACTIVE_API_ACK_DICT[data]))
+        GetPromptSafely(data, ACTIVE_API_ACK_DICT)))
 
 ########################################
 

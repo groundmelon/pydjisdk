@@ -21,10 +21,12 @@ def decode_acquire_control(s):
 #########################################
 ACQUIRE_CONTROL_ACK_FMT = '<H'
 ACQUIRE_CONTROL_ACK_DICT = dict((
-    (0x00, 'Refuse to obtaine control authorization(conditions are not met)'),
+    (0x00, 'Need RC in Mode F'),
     (0x01, 'Successfully released control authorization'),
     (0x02, 'Successfully obtained control authorization'),
-    (0x03, 'In progress'),
+    (0x03, 'Obtain in progress'),
+    (0x04, 'Release in progress'),
+    (0x00C9, 'IOC'),
 ))
 
 
@@ -36,7 +38,7 @@ def decode_acquire_control_ack(s):
     rst = struct.unpack(ACQUIRE_CONTROL_ACK_FMT, s)
     ack = rst[0]
     logging.getLogger(LOGGER_NAME).info(
-        'Control acquire result: {}'.format(ACQUIRE_CONTROL_ACK_DICT[ack]))
+        'Control acquire result: {}'.format(GetPromptSafely(ack, ACQUIRE_CONTROL_ACK_DICT)))
 
 #########################################
 TASK_CONTROL_DICT = dict((
@@ -75,7 +77,7 @@ def encode_task_control_ack(**kwargs):
 def decode_task_control_ack(s):
     rst = struct.unpack(TASK_CONTROL_FMT, s)
     ack = rst[0]
-    logging.getLogger(LOGGER_NAME).info(''.format(TASK_CONTROL_ACK_DICT[ack]))
+    logging.getLogger(LOGGER_NAME).info(''.format(GetPromptSafely(ack, TASK_CONTROL_ACK_DICT)))
 
 #########################################
 TASK_INQUIRE_FMT = '<B'
@@ -110,7 +112,7 @@ def decode_task_inquire_ack(s):
     seq = rst[0]
     ack = rst[1]
     logging.getLogger(LOGGER_NAME).info(
-        'Task inquire #{} rst: {}'.format(seq, TASK_INQUIRE_ACK_DICT[ack]))
+        'Task inquire #{} rst: {}'.format(seq, GetPromptSafely(ack, TASK_INQUIRE_ACK_DICT)))
 
 #########################################
 ATT_CONTROL_FMT = '<B4f'
