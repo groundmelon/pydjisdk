@@ -32,7 +32,7 @@ It is only for testing basic communication functionality. Developers can add mor
 4. With default configuration, I suggest bringing up 3 terminal windows for using and testing this package: 
 	* Terminal 0 : ```$ python app.py```. 
 
-	* Terminal 1 : ```$ tail -f log/python.log``` for debug information
+	* Terminal 1 : ```$ tail -f log/app.log``` for debug information
 
 	* Terminal 2 : ```$ tail -f log/broadcast.log``` for broadcast information from fmu.
 
