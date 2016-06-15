@@ -251,6 +251,7 @@ class ProtocolParser(StoppableThread):
                     ''.join([self.buf[x] for x in range(i, i + HEADER_LEN)]))
                 if header.is_valid():
                     self.header = header
+                    # self.parserlogger.debug("A header is parsed:" + str(self.header))
                     return (True, i)
                 else:
                     pass

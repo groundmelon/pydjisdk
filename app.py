@@ -8,7 +8,8 @@ if __name__ == '__main__':
     app = SDKApplication(
         app_id=config['app_id'],
         aes256_key=config['enc_key'],
-        port=config['port'])
+        port=config['port'],
+        baudrate=config['baudrate'])
 
     operation_table = dict((
         (0, app.get_api_version),

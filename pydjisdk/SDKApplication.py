@@ -84,6 +84,8 @@ class SDKApplication(StoppableThread):
 
     port -- your serial port path
 
+    baudrate -- your serial port baudrate
+
     '''
 
     def __init__(self, **kwargs):

@@ -96,6 +96,7 @@ class SerialPort(object):
         )
 
     def open(self):
+        logging.getLogger('app').debug('Try open serial: {}'.format(self.ser))
         self.ser.open()
         self.listener.start()
 
