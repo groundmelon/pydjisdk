@@ -3,7 +3,7 @@
 
 ### Brief Introduction ###
 
-Another version of [https://github.com/dji-sdk/Onboard-SDK](DJISDK) using python. 
+Another version of [dji-sdk/Onboard-SDK](https://github.com/dji-sdk/Onboard-SDK) using python. 
 
 Compatible with dji-sdk version 3.0
 
